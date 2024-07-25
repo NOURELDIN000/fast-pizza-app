@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 // @ts-nocheck
-import React from 'react'
 import { useDispatch } from 'react-redux'
 import { decreaseItemQuantity, increaseItemQuantity } from './CartSlice';
 import Button from '../../ui/Button';

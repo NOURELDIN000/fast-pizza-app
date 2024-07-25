@@ -3,7 +3,7 @@
 // @ts-nocheck
 // Test ID: IIDSAT
 
-import { useLoaderData } from "react-router-dom";
+import { useFetcher, useLoaderData } from "react-router-dom";
 import { getOrder } from "../../services/apiRestaurant";
 
 import {
@@ -12,6 +12,8 @@ import {
   formatDate,
 } from "../../utils/helpers";
 import OrderItem from "./OrderItem";
+import { useEffect } from "react";
+import UpdateOrder from "./UpdateOrder";
 
 // const order = {
 //   id: "ABCDEF",
@@ -49,8 +51,20 @@ import OrderItem from "./OrderItem";
 // };
 
 function Order() {
-  // Everyone can search for all orders, so for privacy reasons we're gonna gonna exclude names or address, these are only for the restaurant staff
   const order = useLoaderData();
+
+  const fetcher = useFetcher();
+
+  useEffect(
+    function () {
+      if (!fetcher.data && fetcher.state === "idle") fetcher.load("/menu");
+      console.log(fetcher.data);
+    },
+    [fetcher],
+  );
+
+  const isLoadingIngredients = fetcher.state === "loading";
+
   const {
     id,
     status,
@@ -60,37 +74,65 @@ function Order() {
     estimatedDelivery,
     cart,
   } = order;
-  // const deliveryIn = calcMinutesLeft(estimatedDelivery);
+
+  const deliveryIn = calcMinutesLeft(estimatedDelivery);
 
   return (
-    <div className="px-8 py-6 space-y-8">
+    <div className="space-y-8 px-8 py-6">
       <div className="flex items-center justify-between gap-2 max-sm:flex-col">
         <h2> Order # {id} Status</h2>
 
         <div className="space-x-2">
-          {priority && <span className="text-red-50 bg-red-500 px-3 py-1 text-sm font-semibold tracking-wide rounded-full uppercase">priority</span>}
-          <span className=" text-green-50 bg-green-500 px-3 py-1 text-sm font-semibold tracking-wide rounded-full uppercase">{status} order</span>
+          {priority && (
+            <span className="rounded-full bg-red-500 px-3 py-1 text-sm font-semibold uppercase tracking-wide text-red-50">
+              priority
+            </span>
+          )}
+          <span className="rounded-full bg-green-500 px-3 py-1 text-sm font-semibold uppercase tracking-wide text-green-50">
+            {status} order
+          </span>
         </div>
       </div>
 
       <div className="flex flex-wrap items-center justify-between gap-2 bg-stone-200 px-6 py-5">
         <p className="font-medium">
-          
-             `Only ${calcMinutesLeft(estimatedDelivery)} minutes left 😃`
-           
+          {deliveryIn >= 0
+            ? `Only ${calcMinutesLeft(estimatedDelivery)} minutes left 😃`
+            : "Order should have arrived"}
         </p>
-        <p className="text-xs text-stone-500">(Estimated delivery: {formatDate(estimatedDelivery)})</p>
+        <p className="text-xs text-stone-500">
+          (Estimated delivery: {formatDate(estimatedDelivery)})
+        </p>
       </div>
 
-      <ul className="divide-y divide-stone-200 border-b border-t">{cart.map((item)=>(
-        <OrderItem item={item} key={item.id}/>
-      ))}</ul>
+      <ul className="divide-y divide-stone-200 border-b border-t">
+        {cart.map((item) => (
+          <OrderItem
+            item={item}
+            key={item.pizzaId}
+            ingredients={
+              fetcher?.data?.find((el) => el.id === item.pizzaId)
+                ?.ingredients ?? []
+            }
+            isLoadingIngredients={isLoadingIngredients}
+          />
+        ))}
+      </ul>
 
       <div className="space-y-2 bg-stone-200 px-6 py-5">
-        <p className="text-sm font-medium text-stone-600">Price pizza: {formatCurrency(orderPrice)}</p>
-        {priority && <p className="text-sm font-medium text-stone-600">Price priority: {formatCurrency(priorityPrice)}</p>}
-        <p className="font-bold">To pay on delivery: {formatCurrency(orderPrice + priorityPrice)}</p>
+        <p className="text-sm font-medium text-stone-600">
+          Price pizza: {formatCurrency(orderPrice)}
+        </p>
+        {priority && (
+          <p className="text-sm font-medium text-stone-600">
+            Price priority: {formatCurrency(priorityPrice)}
+          </p>
+        )}
+        <p className="font-bold">
+          To pay on delivery: {formatCurrency(orderPrice + priorityPrice)}
+        </p>
       </div>
+      {!priority && <UpdateOrder />}
     </div>
   );
 }

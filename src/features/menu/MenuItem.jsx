@@ -24,11 +24,11 @@ function MenuItem({ pizza }) {
   }
 
   const currentQuantity = useSelector(getQuantityById(id));
-  
+
   const isInCart = currentQuantity > 0;
 
   return (
-    <li className="flex gap-4 py-2 pt-0.5  ">
+    <li className="flex gap-4 py-2 pt-0.5">
       <img
         src={imageUrl}
         alt={name}
@@ -48,22 +48,23 @@ function MenuItem({ pizza }) {
             </p>
           )}
 
-          <div >
+          <div>
+            {!soldOut && !isInCart && (
+              <Button type="small" onClick={handleAddToCart}>
+                Add To Cart
+              </Button>
+            )}
 
-          
-
-         { !soldOut && !isInCart && <Button type="small" onClick={handleAddToCart}>
-            Add To Cart
-          </Button> }
-
-          {  isInCart &&
-          <div className="flex items-center gap-3">
-            <UpdateCartQuantity  pizzaId={id} currentQuantity={currentQuantity}/>
-            <DeleteItem pizzaId={id}/>
-          </div> 
-          }
+            {isInCart && (
+              <div className="flex items-center gap-3">
+                <UpdateCartQuantity
+                  pizzaId={id}
+                  currentQuantity={currentQuantity}
+                />
+                <DeleteItem pizzaId={id} />
+              </div>
+            )}
           </div>
-
         </div>
       </div>
     </li>

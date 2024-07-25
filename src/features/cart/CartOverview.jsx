@@ -9,20 +9,17 @@ function CartOverview() {
   const totalCartQuantity = useSelector(getTotalQuantity);
   const totalCartPrice = useSelector(getTotalPrice);
 
-
-
-if(!totalCartPrice) return ;
+  if (!totalCartPrice) return;
 
   return (
-     
-    
-
-    <div className="bg-stone-800 text-stone-100 flex justify-between p-4 ">
-      <p className="space-x-3 ">
+    <div className="flex justify-between bg-stone-800 p-4 text-stone-100">
+      <p className="space-x-3">
         <span>{totalCartQuantity} pizzas</span>
-        <span className=" inline-block">{formatCurrency(totalCartPrice)}</span>
+        <span className="inline-block">{formatCurrency(totalCartPrice)}</span>
       </p>
-      <a   className=" cursor-pointer" onClick={()=>navigate('/cart')} >Open cart &rarr;</a>
+      <a className="cursor-pointer" onClick={() => navigate("/cart")}>
+        Open cart &rarr;
+      </a>
     </div>
   );
 }

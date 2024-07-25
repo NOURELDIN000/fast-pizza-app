@@ -38,5 +38,3 @@ export default function Header() {
 }
 
 
-// "rounded-full px-4 py-2 text-sm bg-yellow-100 placeholder:text-sm focus:outline-none focus:ring focus:ring-yellow-200
-//          w-36  sm:w-64 sm:focus:w-72 "

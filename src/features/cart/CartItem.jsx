@@ -1,7 +1,6 @@
 // @ts-nocheck
 /* eslint-disable react/prop-types */
 import DeleteItem from "../../ui/DeleteItem";
-import Button from "../../ui/Button";
 import { formatCurrency } from "../../utils/helpers";
 import UpdateCartQuantity from "./UpdateItemQuantity";
 import { useSelector } from "react-redux";
@@ -13,16 +12,18 @@ function CartItem({ item }) {
   const currentQuantity = useSelector(getQuantityById(pizzaId));
 
   return (
-    <li className="py-3 md:block max-md:flex max-md:justify-between max-md:items-center">
+    <li className="py-3 max-md:flex max-md:items-center max-md:justify-between md:block">
       <p className="mb-1">
         {quantity}&times; {name}
       </p>
       <div className="flex items-center justify-between max-md:gap-6">
         <p>{formatCurrency(totalPrice)}</p>
         <div className="flex items-center gap-4">
-
-        <UpdateCartQuantity  pizzaId={pizzaId} currentQuantity={currentQuantity}/>
-        <DeleteItem pizzaId={pizzaId}/>
+          <UpdateCartQuantity
+            pizzaId={pizzaId}
+            currentQuantity={currentQuantity}
+          />
+          <DeleteItem pizzaId={pizzaId} />
         </div>
       </div>
     </li>
