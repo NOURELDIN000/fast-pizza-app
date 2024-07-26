@@ -7,7 +7,7 @@ import Button from '../../ui/Button';
 export default function UpdateCartQuantity({pizzaId, currentQuantity}) {
     const dispatch = useDispatch();
   return (
-    <div className='space-x-4'>
+    <div className=' max-sm:space-x-2  space-x-4'>
         <Button type='round' onClick={()=> dispatch(decreaseItemQuantity(pizzaId))}>-</Button>
         <span className='font-medium'>{currentQuantity}</span>
         <Button type='round' onClick={()=> dispatch(increaseItemQuantity(pizzaId))}>+</Button>

@@ -71,14 +71,18 @@ function CreateOrder() {
 
   const dispatch = useDispatch();
 
+  const [addressInput, setAddressInput] = useState(address || "");
+
+  const handleAddressChange = (e) => setAddressInput(e.target.value);
+
   if (!cart.length) return <EmptyCart />;
 
   return (
-    <div className="mx-auto mt-10 w-[300px] sm:w-[500px] md:w-[700px] lg:w-[900px]">
+    <div className="mx-auto mt-10 w-[350px] sm:w-[500px] md:w-[700px] lg:w-[900px]">
       <h2 className="font-semibold">Ready to order? Let's go!</h2>
 
       <Form method="POST" className="mt-5">
-        <div className="max-md:flex max-md:items-center md:block">
+        <div className="max-md:flex max-md:items-center max-md:justify-center md:block">
           <label className="inline-block max-md:basis-40 md:mb-2">
             First Name
           </label>
@@ -118,6 +122,7 @@ function CreateOrder() {
               defaultValue={address}
               name="address"
               disabled={isLoadingAddress}
+              onChange={handleAddressChange}
               required
             />
             {addressStatus === "error" && (
@@ -125,7 +130,7 @@ function CreateOrder() {
                 {errorAddress}
               </p>
             )}
-            {!address && (
+            {!position.latitude && !position.longitude && !addressInput && (
               <span className="absolute right-[2px] top-[2px] md:top-[33px]">
                 <Button
                   type="small"
@@ -151,7 +156,7 @@ function CreateOrder() {
             value={withPriority}
             onChange={(e) => setWithPriority(e.target.checked)}
           />
-          <label htmlFor="priority">Want to yo give your order priority?</label>
+          <label htmlFor="priority">Want to give your order priority?</label>
         </div>
         <input type="hidden" name="cart" value={JSON.stringify(cart)} />
         <input

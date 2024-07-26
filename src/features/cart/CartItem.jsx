@@ -12,7 +12,7 @@ function CartItem({ item }) {
   const currentQuantity = useSelector(getQuantityById(pizzaId));
 
   return (
-    <li className="py-3 max-md:flex max-md:items-center max-md:justify-between md:block">
+    <li className="py-3 ">
       <p className="mb-1">
         {quantity}&times; {name}
       </p>
